@@ -5,6 +5,7 @@ import org.tools.ppmtool.data.models.Project;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 @Repository
-public interface ProjectRepository extends JpaRepository<Project,Long>  {
+public interface ProjectRepository extends JpaRepository<Project, Long> {
 
+    Project findByProjectIdentifier(String projectId);
 }

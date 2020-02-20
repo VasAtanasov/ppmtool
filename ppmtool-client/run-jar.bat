@@ -1,0 +1,9 @@
+@echo off
+
+cd .. && cd ppmtool-server
+
+set DB_NAME=ppmtool_db
+set DB_USERNAME=root
+set DB_PASSWORD=1234
+
+java -jar target/ppmtool-0.0.1-SNAPSHOT.jar

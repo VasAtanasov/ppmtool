@@ -21,3 +21,24 @@ export const deleteProject = async projectId => {
         return handleError(error);
     }
 };
+
+export const saveProject = async project => {
+    try {
+        let httpAction = project.id ? http.post : http.put;
+        const res = await httpAction(PROJECTS_URL + '/' + (project.id || ''), {
+            data: project
+        });
+        return handleResponse(res);
+    } catch (error) {
+        handleError(error);
+    }
+};
+
+export const getProject = async projectId => {
+    try {
+        let response = await http.get(PROJECTS_URL + '/' + projectId);
+        return handleResponse(response);
+    } catch (error) {
+        return handleError(error);
+    }
+};

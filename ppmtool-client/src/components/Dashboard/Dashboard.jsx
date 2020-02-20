@@ -31,7 +31,7 @@ const Dashboard = ({ projects, getProjects, deleteProject }) => {
 
     return (
         <Fragment>
-            {redirectToAddCoursePage && <Redirect to="/addProject" />}
+            {redirectToAddCoursePage && <Redirect to="/project" />}
             <div className="row">
                 <div className="col-md-12">
                     <h1 className="display-4 text-center">Projects</h1>

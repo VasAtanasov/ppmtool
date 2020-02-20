@@ -5,9 +5,13 @@ export function loadProjectsSuccess(projects) {
     return { type: types.GET_PROJECTS, projects };
 }
 
-// export function getProjectSuccess(project) {
-//     return { type: GET_PROJECT, payload: project };
-// }
+export function createProjectSuccess(projects) {
+    return { type: types.CREATE_PROJECT_SUCCESS, projects };
+}
+
+export function updateProjectSuccess(projects) {
+    return { type: types.UPDATE_PROJECT_SUCCESS, projects };
+}
 
 export function deleteProjectOptimistic(id) {
     return { type: types.DELETE_PROJECT, id };
@@ -24,30 +28,18 @@ export const getProjects = () => async dispatch => {
         });
 };
 
-// export const createProject = (project, history) => async dispatch => {
-//     try {
-//         await http.post('/api/projects', { data: project });
-//         history.push('/dashboard');
-//         dispatch({
-//             type: GET_ERRORS,
-//             payload: {}
-//         });
-//     } catch (err) {
-//         dispatch({
-//             type: GET_ERRORS,
-//             payload: err.response.data
-//         });
-//     }
-// };
-
-// export const getProject = (id, history) => async dispatch => {
-//     try {
-//         const res = await http.get(`/api/projects/${id}`);
-//         dispatch(getProjectSuccess(res.data));
-//     } catch (error) {
-//         history.push('/dashboard');
-//     }
-// };
+export const createProject = project => async dispatch => {
+    return projectApi
+        .saveProject(project)
+        .then(savedProject => {
+            project.id
+                ? dispatch(updateProjectSuccess(savedProject))
+                : dispatch(createProjectSuccess(savedProject));
+        })
+        .catch(error => {
+            throw error;
+        });
+};
 
 export const deleteProject = id => async dispatch => {
     dispatch(deleteProjectOptimistic(id));

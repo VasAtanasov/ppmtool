@@ -23,9 +23,7 @@ const ItemsList = ({ projects, handleDelete }) =>
                                 </i>
                             </li>
                         </a>
-                        <Link
-                            to={`/updateProject/${project.projectIdentifier}`}
-                        >
+                        <Link to={`/project/${project.id}`}>
                             <li className="list-group-item update">
                                 <i className="fa fa-edit pr-1">
                                     {' '}

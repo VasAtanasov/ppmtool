@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
-import { Navbar, Dashboard, Landing } from './components';
+import { Navbar, Dashboard, Landing, ManageProject } from './components';
 import Theme from './Theme';
 import GlobalStyles from './utils/globalStyle';
 import Container from 'react-bootstrap/Container';
@@ -17,6 +17,17 @@ export const routes = [
         path: '/dashboard',
         component: Dashboard,
         name: 'Dashboard'
+    },
+    {
+        path: '/project/:id',
+        component: ManageProject,
+        name: 'ManageProject'
+    },
+
+    {
+        path: '/project',
+        component: ManageProject,
+        name: 'ManageProject'
     }
 ];
 

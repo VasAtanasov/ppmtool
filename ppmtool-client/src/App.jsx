@@ -4,6 +4,8 @@ import { Navbar, Dashboard, Landing } from './components';
 import Theme from './Theme';
 import GlobalStyles from './utils/globalStyle';
 import Container from 'react-bootstrap/Container';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export const routes = [
     {
@@ -35,6 +37,7 @@ function App() {
                         />
                     ))}
                 </Switch>
+                <ToastContainer autoClose={3000} />
             </Container>
         </Theme>
     );

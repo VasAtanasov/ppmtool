@@ -1,45 +1,73 @@
-import React, { useEffect } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { getProjects } from '../../actions/projectActions';
+import { getProjects, deleteProject } from '../../actions/projectActions';
 import PropTypes from 'prop-types';
-import ProjectItem from './ProjectItem';
+import { Redirect } from 'react-router-dom';
+import ItemsList from './ItemsList';
+import { toast } from 'react-toastify';
 
-const Dashboard = ({ project, getProjects }) => {
+const Dashboard = ({ projects, getProjects, deleteProject }) => {
+    const [redirectToAddCoursePage, setRedirectToAddCoursePage] = useState(
+        false
+    );
+
     useEffect(() => {
-        getProjects();
+        getProjects().catch(error => {
+            alert('Loading courses failed' + error);
+        });
+        // eslint-disable-next-line
     }, []);
 
-    const { projects } = project;
+    const handleDelete = async id => {
+        toast.success('Course deleted');
+        try {
+            await deleteProject(id);
+        } catch (error) {
+            toast.error('Delete failed. ' + error.message, {
+                autoClose: false
+            });
+        }
+    };
 
     return (
-        <div className="row">
-            <div className="col-md-12">
-                <h1 className="display-4 text-center">Projects</h1>
-                <br />
-                <a href="ProjectForm.html" className="btn btn-lg btn-info">
-                    Create a Project
-                </a>
-                <br />
-                <hr />
-                {projects.map(project => (
-                    <ProjectItem key={project.id} project={project} />
-                ))}
+        <Fragment>
+            {redirectToAddCoursePage && <Redirect to="/addProject" />}
+            <div className="row">
+                <div className="col-md-12">
+                    <h1 className="display-4 text-center">Projects</h1>
+                    <br />
+                    <button
+                        style={{ marginBottom: 20 }}
+                        className="btn btn-lg btn-info"
+                        onClick={() => setRedirectToAddCoursePage(true)}
+                    >
+                        Create a Project
+                    </button>
+                    <br />
+                    <hr />
+                    <ItemsList
+                        projects={projects}
+                        handleDelete={handleDelete}
+                    />
+                </div>
             </div>
-        </div>
+        </Fragment>
     );
 };
 
 Dashboard.propTypes = {
-    project: PropTypes.object.isRequired,
-    getProjects: PropTypes.func.isRequired
+    projects: PropTypes.array.isRequired,
+    getProjects: PropTypes.func.isRequired,
+    deleteProject: PropTypes.func.isRequired
 };
 
-const mapStateToProps = state => ({
-    project: state.project
+const mapStateToProps = ({ projects }) => ({
+    projects
 });
 
 const mapDispatchToProps = {
-    getProjects
+    getProjects,
+    deleteProject
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

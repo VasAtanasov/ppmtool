@@ -1,36 +1,23 @@
-import {
-    GET_PROJECTS,
-    GET_PROJECT,
-    DELETE_PROJECT
-} from '../actions/actionTypes';
+import * as types from '../actions/actionTypes';
 
-const initialState = {
-    projects: [],
-    project: {}
-};
+const initialState = [];
 
 export default function(state = initialState, action) {
     switch (action.type) {
-        case GET_PROJECTS:
-            return {
-                ...state,
-                projects: action.payload
-            };
+        case types.GET_PROJECTS:
+            return action.projects;
 
-        case GET_PROJECT:
-            debugger;
-            return {
-                ...state,
-                project: action.payload
-            };
+        // case GET_PROJECT:
+        //     debugger;
+        //     return {
+        //         ...state,
+        //         project: action.payload
+        //     };
 
-        case DELETE_PROJECT:
-            return {
-                ...state,
-                projects: state.projects.filter(
-                    project => project.projectIdentifier !== action.payload
-                )
-            };
+        case types.DELETE_PROJECT:
+            return state.filter(
+                project => project.projectIdentifier !== action.id
+            );
         default:
             return state;
     }

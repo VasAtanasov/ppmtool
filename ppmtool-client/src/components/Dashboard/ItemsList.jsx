@@ -1,16 +1,10 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { deleteProject } from '../../../actions/projectActions';
+import { Link } from 'react-router-dom';
 
-const ProjectItem = ({ project, deleteProject }) => {
-    const onDeleteClick = id => {
-        deleteProject(id);
-    };
-
-    return (
-        <div className="card card-body bg-light mb-3">
+const ItemsList = ({ projects, handleDelete }) =>
+    projects.map(project => (
+        <div key={project.id} className="card card-body bg-light mb-3">
             <div className="row">
                 <div className="col-2">
                     <span className="mx-auto">{project.projectIdentifier}</span>
@@ -43,7 +37,7 @@ const ProjectItem = ({ project, deleteProject }) => {
                         <li
                             className="list-group-item delete"
                             onClick={() =>
-                                onDeleteClick(project.projectIdentifier)
+                                handleDelete(project.projectIdentifier)
                             }
                         >
                             <i className="fa fa-minus-circle pr-1">
@@ -55,11 +49,11 @@ const ProjectItem = ({ project, deleteProject }) => {
                 </div>
             </div>
         </div>
-    );
+    ));
+
+ItemsList.propTypes = {
+    projects: PropTypes.array.isRequired,
+    handleDelete: PropTypes.func.isRequired
 };
 
-ProjectItem.propTypes = {
-    deleteProject: PropTypes.func.isRequired
-};
-
-export default connect(null, { deleteProject })(ProjectItem);
+export default ItemsList;

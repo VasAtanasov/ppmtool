@@ -22,7 +22,7 @@ import org.tools.ppmtool.service.services.ProjectService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/projects")
+@RequestMapping("/projects")
 @RequiredArgsConstructor(onConstructor_ = { @Autowired })
 public class ProjectController {
 

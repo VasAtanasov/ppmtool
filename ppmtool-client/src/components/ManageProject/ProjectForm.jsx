@@ -56,7 +56,7 @@ const ProjectForm = ({
                 name="endDate"
                 label="End Date"
                 onChange={onChange}
-                value={project.startDate}
+                value={project.endDate}
             />
 
             <button

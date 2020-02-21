@@ -8,9 +8,11 @@ export default function(state = initialState.projects, action) {
         case types.CREATE_PROJECT_SUCCESS:
             return [...state, { ...action.project }];
         case types.UPDATE_PROJECT_SUCCESS:
-            return state.map(project =>
-                project.id === action.project.id ? action.project : project
-            );
+            return state.map(project => {
+                return project.id === action.project.id
+                    ? action.project
+                    : project;
+            });
         case types.DELETE_PROJECT:
             return state.filter(
                 project => project.projectIdentifier !== action.id

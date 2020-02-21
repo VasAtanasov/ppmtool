@@ -5,12 +5,12 @@ export function loadProjectsSuccess(projects) {
     return { type: types.GET_PROJECTS, projects };
 }
 
-export function createProjectSuccess(projects) {
-    return { type: types.CREATE_PROJECT_SUCCESS, projects };
+export function createProjectSuccess(project) {
+    return { type: types.CREATE_PROJECT_SUCCESS, project };
 }
 
-export function updateProjectSuccess(projects) {
-    return { type: types.UPDATE_PROJECT_SUCCESS, projects };
+export function updateProjectSuccess(project) {
+    return { type: types.UPDATE_PROJECT_SUCCESS, project };
 }
 
 export function deleteProjectOptimistic(id) {

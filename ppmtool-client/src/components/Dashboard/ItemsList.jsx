@@ -4,7 +4,10 @@ import { Link } from 'react-router-dom';
 
 const ItemsList = ({ projects, handleDelete }) =>
     projects.map(project => (
-        <div key={project.id} className="card card-body bg-light mb-3">
+        <div
+            key={project.projectIdentifier}
+            className="card card-body bg-light mb-3"
+        >
             <div className="row">
                 <div className="col-2">
                     <span className="mx-auto">{project.projectIdentifier}</span>
@@ -15,14 +18,14 @@ const ItemsList = ({ projects, handleDelete }) =>
                 </div>
                 <div className="col-md-4 d-none d-lg-block">
                     <ul className="list-group">
-                        <a href="#">
-                            <li className="list-group-item board">
-                                <i className="fa fa-flag-checkered pr-1">
-                                    {' '}
-                                    Project Board{' '}
-                                </i>
-                            </li>
-                        </a>
+                        {/* <a href="#"> */}
+                        <li className="list-group-item board">
+                            <i className="fa fa-flag-checkered pr-1">
+                                {' '}
+                                Project Board{' '}
+                            </i>
+                        </li>
+                        {/* </a> */}
                         <Link to={`/project/${project.id}`}>
                             <li className="list-group-item update">
                                 <i className="fa fa-edit pr-1">
@@ -31,7 +34,6 @@ const ItemsList = ({ projects, handleDelete }) =>
                                 </i>
                             </li>
                         </Link>
-
                         <li
                             className="list-group-item delete"
                             onClick={() =>

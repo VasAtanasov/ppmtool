@@ -24,7 +24,7 @@ export const deleteProject = async projectId => {
 
 export const saveProject = async project => {
     try {
-        let httpAction = project.id ? http.post : http.put;
+        let httpAction = project.id ? http.put : http.post;
         const res = await httpAction(PROJECTS_URL + '/' + (project.id || ''), {
             data: project
         });

@@ -101,7 +101,6 @@ const mapStateToProps = ({ projects }, ownProps) => {
     const id = ownProps.match.params.id;
     const project =
         id && projects.length > 0 ? getProjectById(projects, id) : newProject;
-    debugger;
     return {
         projects,
         project: project

@@ -1,14 +1,16 @@
 package org.tools.ppmtool.service.services.impl;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.tools.ppmtool.data.models.Project;
 import org.tools.ppmtool.data.repositories.ProjectRepository;
 import org.tools.ppmtool.exceptions.ProjectIdException;
+import org.tools.ppmtool.service.models.ProjectServiceModel;
 import org.tools.ppmtool.service.services.ProjectService;
+import org.tools.ppmtool.utils.ModelMapperWrapper;
 
 import lombok.RequiredArgsConstructor;
 
@@ -18,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 public class ProjectServiceImpl implements ProjectService {
 
     private final ProjectRepository projectRepository;
+    private final ModelMapperWrapper modelMapper;
 
     @Override
     public Project saveOrUpdateProject(final Project project) {
@@ -45,8 +48,10 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public List<Project> findAllProjects() {
-        return projectRepository.findAll();
+    public Page<ProjectServiceModel> findAllProjects(Pageable pageable) {
+        return projectRepository.findAll(pageable).map(project -> {
+            return modelMapper.map(project, ProjectServiceModel.class);
+        });
     }
 
     @Override

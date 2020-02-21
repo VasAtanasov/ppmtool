@@ -1,10 +1,15 @@
 import * as types from '../actions/actionTypes';
 import initialState from './initialState';
 
-export default function(state = initialState.projects, action) {
+const mapGetProjectsData = page => {
+    debugger;
+    return page.content;
+};
+
+export default (state = initialState.projects, action) => {
     switch (action.type) {
         case types.GET_PROJECTS:
-            return action.projects;
+            return mapGetProjectsData(action.projects);
         case types.CREATE_PROJECT_SUCCESS:
             return [...state, { ...action.project }];
         case types.UPDATE_PROJECT_SUCCESS:
@@ -20,4 +25,4 @@ export default function(state = initialState.projects, action) {
         default:
             return state;
     }
-}
+};

@@ -13,11 +13,7 @@ const ProjectForm = ({
     return (
         <form onSubmit={onSave}>
             <h2>{project.id ? 'Update' : 'Create'} Project form</h2>
-            {errors.onSave && (
-                <div className="alert alert-danger" role="alert">
-                    {errors.onSave}
-                </div>
-            )}
+
             <TextInput
                 name="projectName"
                 label="Project Name"

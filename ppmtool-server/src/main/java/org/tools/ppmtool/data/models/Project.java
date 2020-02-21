@@ -32,7 +32,7 @@ public class Project {
     private String projectIdentifier;
 
     @NotBlank(message = "Project description is required")
-    @Column(name = "project_description", nullable = false)
+    @Column(name = "description", nullable = false)
     private String description;
 
     @Column(name = "start_date")

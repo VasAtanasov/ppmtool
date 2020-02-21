@@ -12,9 +12,11 @@ const Dashboard = ({ projects, getProjects, deleteProject }) => {
     );
 
     useEffect(() => {
-        getProjects().catch(error => {
-            alert('Loading courses failed' + error);
-        });
+        if (projects.length === 0) {
+            getProjects().catch(error => {
+                alert('Loading courses failed' + error);
+            });
+        }
         // eslint-disable-next-line
     }, []);
 

@@ -1,5 +1,11 @@
 import styled from 'styled-components';
 
+export const NavbarWarper = styled.header`
+    & nav {
+        padding: 0;
+    }
+`;
+
 export const StyledLink = styled.span`
     a {
         padding: 0.5rem 0.5rem;

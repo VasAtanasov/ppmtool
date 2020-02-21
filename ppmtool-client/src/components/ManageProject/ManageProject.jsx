@@ -70,7 +70,7 @@ const ManageProject = ({
             })
             .catch(error => {
                 setSaving(false);
-                setErrors({ onSave: error.message });
+                setErrors({ ...error.response.data });
             });
     };
 

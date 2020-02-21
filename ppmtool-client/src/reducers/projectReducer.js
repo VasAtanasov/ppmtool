@@ -2,7 +2,6 @@ import * as types from '../actions/actionTypes';
 import initialState from './initialState';
 
 const mapGetProjectsData = page => {
-    debugger;
     return page.content;
 };
 
@@ -19,9 +18,7 @@ export default (state = initialState.projects, action) => {
                     : project;
             });
         case types.DELETE_PROJECT:
-            return state.filter(
-                project => project.projectIdentifier !== action.id
-            );
+            return state.filter(project => project.id !== action.id);
         default:
             return state;
     }

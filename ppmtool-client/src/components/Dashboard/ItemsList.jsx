@@ -4,13 +4,10 @@ import { Link } from 'react-router-dom';
 
 const ItemsList = ({ projects, handleDelete }) =>
     projects.map(project => (
-        <div
-            key={project.projectIdentifier}
-            className="card card-body bg-light mb-3"
-        >
+        <div key={project.id} className="card card-body bg-light mb-3">
             <div className="row">
                 <div className="col-2">
-                    <span className="mx-auto">{project.projectIdentifier}</span>
+                    <span className="mx-auto">{project.id}</span>
                 </div>
                 <div className="col-lg-6 col-md-4 col-8">
                     <h3>{project.projectName}</h3>
@@ -36,9 +33,7 @@ const ItemsList = ({ projects, handleDelete }) =>
                         </Link>
                         <li
                             className="list-group-item delete"
-                            onClick={() =>
-                                handleDelete(project.projectIdentifier)
-                            }
+                            onClick={() => handleDelete(project.id)}
                         >
                             <i className="fa fa-minus-circle pr-1">
                                 {' '}

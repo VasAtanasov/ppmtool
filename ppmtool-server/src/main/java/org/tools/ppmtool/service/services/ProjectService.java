@@ -2,15 +2,15 @@ package org.tools.ppmtool.service.services;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.tools.ppmtool.data.models.Project;
 import org.tools.ppmtool.service.models.ProjectServiceModel;
+import org.tools.ppmtool.web.models.requests.ProjectCreateRequest;
 
 public interface ProjectService {
-    Project saveOrUpdateProject(final Project project);
+    ProjectServiceModel saveOrUpdateProject(ProjectCreateRequest projectRequest);
 
-    Project findProjectByIdentifier(String projectId);
+    ProjectServiceModel findProjectById(String projectId);
 
     Page<ProjectServiceModel> findAllProjects(Pageable pageable);
 
-    void deleteProjectByIdentifier(String projectId);
+    void deleteProjectById(String projectId);
 }

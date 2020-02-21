@@ -11,6 +11,7 @@ import org.tools.ppmtool.exceptions.ProjectIdException;
 import org.tools.ppmtool.service.models.ProjectServiceModel;
 import org.tools.ppmtool.service.services.ProjectService;
 import org.tools.ppmtool.utils.ModelMapperWrapper;
+import org.tools.ppmtool.web.models.requests.ProjectCreateRequest;
 
 import lombok.RequiredArgsConstructor;
 
@@ -23,28 +24,27 @@ public class ProjectServiceImpl implements ProjectService {
     private final ModelMapperWrapper modelMapper;
 
     @Override
-    public Project saveOrUpdateProject(final Project project) {
+    public ProjectServiceModel saveOrUpdateProject(ProjectCreateRequest projectRequest) {
+        Project project = projectRepository.findById(projectRequest.getId()).map(p -> {
+            p.setProjectName(projectRequest.getProjectName());
+            p.setDescription(projectRequest.getDescription());
+            p.setStartDate(projectRequest.getStartDate());
+            p.setEndDate(projectRequest.getEndDate());
+            return p;
+        }).orElseGet(() -> modelMapper.map(projectRequest, Project.class));
 
         try {
-            project.setProjectIdentifier(project.getProjectIdentifier().toUpperCase());
-            return projectRepository.save(project);
+            return modelMapper.map(projectRepository.save(project), ProjectServiceModel.class);
         } catch (Exception e) {
-            throw new ProjectIdException(
-                    "Project ID '" + project.getProjectIdentifier().toUpperCase() + "' already exists");
+            throw new ProjectIdException("Project ID '" + project.getId() + "' already exists");
         }
     }
 
     @Override
-    public Project findProjectByIdentifier(String projectId) {
-
-        Project project = projectRepository.findByProjectIdentifier(projectId.toUpperCase());
-
-        if (project == null) {
-            throw new ProjectIdException("Project ID '" + projectId + "' does not exist");
-
-        }
-
-        return project;
+    public ProjectServiceModel findProjectById(String projectId) {
+        return projectRepository.findById(projectId).map(project -> {
+            return modelMapper.map(project, ProjectServiceModel.class);
+        }).orElseThrow(() -> new ProjectIdException("Project ID '" + projectId + "' does not exist"));
     }
 
     @Override
@@ -55,12 +55,9 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public void deleteProjectByIdentifier(String projectId) {
-        Project project = projectRepository.findByProjectIdentifier(projectId.toUpperCase());
-
-        if (project == null) {
-            throw new ProjectIdException("Cannot Project with ID '" + projectId + "'. This project does not exist");
-        }
+    public void deleteProjectById(String projectId) {
+        Project project = projectRepository.findById(projectId).orElseThrow(() -> new ProjectIdException(
+                "Cannot Project with ID '" + projectId + "'. This project does not exist"));
 
         projectRepository.delete(project);
     }

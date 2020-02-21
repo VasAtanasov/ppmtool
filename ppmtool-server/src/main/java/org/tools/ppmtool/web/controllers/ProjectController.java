@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.tools.ppmtool.data.models.Project;
 import org.tools.ppmtool.service.services.MapValidationErrorService;
 import org.tools.ppmtool.service.services.ProjectService;
 import org.tools.ppmtool.utils.ModelMapperWrapper;
+import org.tools.ppmtool.web.models.requests.ProjectCreateRequest;
 import org.tools.ppmtool.web.models.responses.ProjectResponseModel;
 
 import lombok.RequiredArgsConstructor;
@@ -31,7 +31,7 @@ public class ProjectController {
     private final ProjectService projectService;
     private final MapValidationErrorService mapValidationErrorService;
     private final ModelMapperWrapper modelMapper;
-    
+
     @GetMapping
     public ResponseEntity<?> getAllProjects(Pageable pageable) {
         return new ResponseEntity<>(projectService.findAllProjects(pageable).map(project -> {
@@ -40,34 +40,32 @@ public class ProjectController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createNewProject(@Valid @RequestBody Project project, BindingResult result) {
+    public ResponseEntity<?> createNewProject(@Valid @RequestBody ProjectCreateRequest project, BindingResult result) {
 
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         if (errorMap != null)
             return errorMap;
 
-        Project project1 = projectService.saveOrUpdateProject(project);
-
-        return new ResponseEntity<Project>(project1, HttpStatus.CREATED);
+        return new ResponseEntity<ProjectResponseModel>(
+                modelMapper.map(projectService.saveOrUpdateProject(project), ProjectResponseModel.class),
+                HttpStatus.CREATED);
     }
 
     @GetMapping("/{projectId}")
     public ResponseEntity<?> getProjectById(@PathVariable String projectId) {
-
-        Project project = projectService.findProjectByIdentifier(projectId);
-
-        return new ResponseEntity<Project>(project, HttpStatus.OK);
+        return new ResponseEntity<ProjectResponseModel>(
+                modelMapper.map(projectService.findProjectById(projectId), ProjectResponseModel.class), HttpStatus.OK);
     }
 
     @DeleteMapping("/{projectId}")
     public ResponseEntity<?> deleteProject(@PathVariable String projectId) {
-        projectService.deleteProjectByIdentifier(projectId);
+        projectService.deleteProjectById(projectId);
 
         return new ResponseEntity<String>("Project with ID: '" + projectId + "' was deleted", HttpStatus.OK);
     }
 
     @PutMapping("/{projectId}")
-    public ResponseEntity<?> updateProject(@Valid @RequestBody Project project, BindingResult result) {
+    public ResponseEntity<?> updateProject(@Valid @RequestBody ProjectCreateRequest project, BindingResult result) {
         return this.createNewProject(project, result);
     }
 }

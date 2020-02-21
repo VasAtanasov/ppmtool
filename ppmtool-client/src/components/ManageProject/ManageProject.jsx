@@ -8,7 +8,6 @@ import { createProject, getProjects } from '../../actions/projectActions';
 const newProject = {
     id: null,
     projectName: '',
-    projectIdentifier: '',
     description: '',
     startDate: '',
     endDate: ''
@@ -46,12 +45,10 @@ const ManageProject = ({
     };
 
     const formIsValid = () => {
-        const { projectName, projectIdentifier, description } = project;
+        const { projectName, description } = project;
         const errors = {};
 
         if (!projectName) errors.projectName = 'Project name is required.';
-        if (!projectIdentifier)
-            errors.projectIdentifier = 'Project identifier required';
         if (!description) errors.description = 'Description is required';
 
         setErrors(errors);
@@ -62,6 +59,7 @@ const ManageProject = ({
     const handleSave = event => {
         event.preventDefault();
         if (!formIsValid()) return;
+
         setSaving(true);
         createProject(project)
             .then(() => {
@@ -86,7 +84,7 @@ const ManageProject = ({
 };
 
 export function getProjectById(projects, id) {
-    return projects.find(project => project.id === Number(id)) || null;
+    return projects.find(project => project.id === id) || null;
 }
 
 ManageProject.propTypes = {

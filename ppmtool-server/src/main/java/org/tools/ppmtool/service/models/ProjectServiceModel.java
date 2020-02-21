@@ -1,8 +1,6 @@
 package org.tools.ppmtool.service.models;
 
-
-import java.util.Date;
-
+import java.time.LocalDate;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,11 +10,10 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ProjectServiceModel {
 
-    private Long id;
+    private String id;
     private String projectName;
-    private String projectIdentifier;
     private String description;
-    private Date startDate;
-    private Date endDate;
+    private LocalDate startDate;
+    private LocalDate endDate;
 
 }

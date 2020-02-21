@@ -2,17 +2,17 @@ package org.tools.ppmtool.exceptions;
 
 public class ProjectIdExceptionResponse {
 
-    private String projectIdentifier;
+    private String id;
 
-    public ProjectIdExceptionResponse(String projectIdentifier) {
-        this.projectIdentifier = projectIdentifier;
+    public ProjectIdExceptionResponse(String id) {
+        this.id = id;
     }
 
     public String getProjectIdentifier() {
-        return projectIdentifier;
+        return id;
     }
 
-    public void setProjectIdentifier(String projectIdentifier) {
-        this.projectIdentifier = projectIdentifier;
+    public void setProjectIdentifier(String id) {
+        this.id = id;
     }
 }

@@ -5,9 +5,7 @@ const PROJECTS_URL = '/api/projects';
 
 export const loadProjects = async () => {
     try {
-        let response = await http.get(
-            `${PROJECTS_URL}?page=1&size=5&sort=endDate,asc`
-        );
+        let response = await http.get(`${PROJECTS_URL}`);
         return handleResponse(response);
     } catch (error) {
         return handleError(error);
@@ -38,6 +36,7 @@ export const saveProject = async project => {
 export const getProject = async projectId => {
     try {
         let response = await http.get(PROJECTS_URL + '/' + projectId);
+        debugger;
         return handleResponse(response);
     } catch (error) {
         return handleError(error);

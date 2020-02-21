@@ -24,15 +24,6 @@ const ProjectForm = ({
             />
 
             <TextInput
-                name="projectIdentifier"
-                label="Project Identifier"
-                placeholder="Project Identifier"
-                onChange={onChange}
-                value={project.projectIdentifier}
-                error={errors.projectIdentifier}
-            />
-
-            <TextInput
                 name="description"
                 label="Description"
                 placeholder="Description"

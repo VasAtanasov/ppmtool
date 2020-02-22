@@ -1,5 +1,7 @@
 package org.tools.ppmtool.service.services.impl;
 
+import java.util.Random;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,6 +28,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public ProjectServiceModel saveOrUpdateProject(ProjectCreateRequest projectRequest) {
+
         Project project = null;
 
         if (projectRequest.getId() == null) {
@@ -33,6 +36,8 @@ public class ProjectServiceImpl implements ProjectService {
             Backlog backlog = new Backlog();
             backlog.setProject(project);
             project.setBacklog(backlog);
+            project.setProjectIdentifier(getSaltString());
+            backlog.setProjectIdentifier(getSaltString());
         } else {
             project = projectRepository.findById(projectRequest.getId()).map(p -> {
                 p.setProjectName(projectRequest.getProjectName());
@@ -51,10 +56,10 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public ProjectServiceModel findProjectById(String projectId) {
-        return projectRepository.findById(projectId).map(project -> {
+    public ProjectServiceModel findProjectByIdentifier(String projectIdentifier) {
+        return projectRepository.findByProjectIdentifier(projectIdentifier).map(project -> {
             return modelMapper.map(project, ProjectServiceModel.class);
-        }).orElseThrow(() -> new ProjectIdException("Project ID '" + projectId + "' does not exist"));
+        }).orElseThrow(() -> new ProjectIdException("Project ID '" + projectIdentifier + "' does not exist"));
     }
 
     @Override
@@ -65,11 +70,25 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public void deleteProjectById(String projectId) {
-        Project project = projectRepository.findById(projectId).orElseThrow(() -> new ProjectIdException(
-                "Cannot Project with ID '" + projectId + "'. This project does not exist"));
+    public void deleteProjectByIdentifier(String projectIdentifier) {
+        Project project = projectRepository.findByProjectIdentifier(projectIdentifier)
+                .orElseThrow(() -> new ProjectIdException(
+                        "Cannot Project with ID '" + projectIdentifier + "'. This project does not exist"));
 
         projectRepository.delete(project);
+    }
+
+    private String getSaltString() {
+        String SALT_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        StringBuilder salt = new StringBuilder();
+        Random rnd = new Random();
+        while (salt.length() < 5) { // length of the random string.
+            int index = (int) (rnd.nextFloat() * SALT_CHARS.length());
+            salt.append(SALT_CHARS.charAt(index));
+        }
+        String saltStr = salt.toString();
+        return saltStr;
+
     }
 
 }

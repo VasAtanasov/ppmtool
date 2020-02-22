@@ -23,7 +23,4 @@ public class ProjectTaskCreateRequest {
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate dueDate;
-
-    @NotBlank(message = "Project id is required")
-    private String projectId;
 }

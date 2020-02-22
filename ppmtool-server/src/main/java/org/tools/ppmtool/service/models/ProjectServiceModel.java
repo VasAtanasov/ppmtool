@@ -9,12 +9,11 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class ProjectServiceModel {
-
     private String id;
+    private String projectIdentifier;
     private String projectName;
     private String description;
     private LocalDate startDate;
     private LocalDate endDate;
     private BacklogServiceMode backlog;
-
 }

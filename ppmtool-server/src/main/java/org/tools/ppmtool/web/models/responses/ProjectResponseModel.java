@@ -10,6 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ProjectResponseModel {
     private String id;
+    private String projectIdentifier;
     private String projectName;
     private String description;
     private LocalDate startDate;

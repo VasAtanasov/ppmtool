@@ -26,21 +26,22 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/backlog")
 @RequiredArgsConstructor(onConstructor_ = { @Autowired })
-public class ProjectTaskController {
+public class BacklogController {
     private final ProjectTaskService projectTaskService;
     private final MapValidationErrorService mapValidationErrorService;
     private final ModelMapperWrapper modelMapper;
 
-    @PostMapping("/{projectId}")
+    @PostMapping("/{backlogId}")
     public ResponseEntity<?> createProjectTask(@Valid @RequestBody ProjectTaskCreateRequest projectTaskCreateRequest,
-            BindingResult result, @PathVariable String projectId) {
+            BindingResult result, @PathVariable String backlogId) {
 
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         if (errorMap != null)
             return errorMap;
 
-        return new ResponseEntity<ProjectTaskResponseModel>(modelMapper
-                .map(projectTaskService.addProjectTask(projectTaskCreateRequest), ProjectTaskResponseModel.class),
+        return new ResponseEntity<ProjectTaskResponseModel>(
+                modelMapper.map(projectTaskService.addProjectTask(backlogId, projectTaskCreateRequest),
+                        ProjectTaskResponseModel.class),
                 HttpStatus.CREATED);
     }
 

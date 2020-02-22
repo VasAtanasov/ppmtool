@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.tools.ppmtool.data.models.Backlog;
 import org.tools.ppmtool.data.models.Project;
 import org.tools.ppmtool.data.models.ProjectTask;
+import org.tools.ppmtool.data.repositories.BacklogRepository;
 import org.tools.ppmtool.data.repositories.ProjectRepository;
 import org.tools.ppmtool.data.repositories.ProjectTaskRepository;
 import org.tools.ppmtool.service.models.ProjectTaskServiceModel;
@@ -25,49 +26,59 @@ import lombok.RequiredArgsConstructor;
 public class ProjectTaskServiceImpl implements ProjectTaskService {
     private final ProjectTaskRepository projectTaskRepository;
     private final ProjectRepository projectRepository;
+    private final BacklogRepository backlogRepository;
     private final ModelMapperWrapper modelMapper;
 
     @Override
-    public ProjectTaskServiceModel addProjectTask(ProjectTaskCreateRequest projectTaskRequest) {
-        Project project = getProject(projectTaskRequest.getProjectId());
+    public ProjectTaskServiceModel addProjectTask(String backlogId,
+            ProjectTaskCreateRequest projectTaskRequest) {
 
-        if (project.getBacklog() == null) {
-            Backlog backlog = new Backlog();
-            project.setBacklog(backlog);
-            backlog.setProject(project);
+        try {
+            // PTs to be added to a specific project, project != null, BL exists
+            Backlog backlog = backlogRepository.findByProjectIdentifier(backlogId)
+                    .orElseThrow(() -> new ProjectNotFoundException("Project not Found"));
+            // set the bl to pt
+
+            ProjectTask projectTask = modelMapper.map(projectTaskRequest, ProjectTask.class);
+            projectTask.setBacklog(backlog);
+
+            // we want our project sequence to be like this: IDPRO-1 IDPRO-2 ...100 101
+            Integer backlogSequence = backlog.getPTSequence();
+            // Update the BL SEQUENCE
+            backlogSequence++;
+
+            backlog.setPTSequence(backlogSequence);
+
+            // Add Sequence to Project Task
+            projectTask.setProjectSequence(backlog.getProjectIdentifier() + "-" + backlogSequence);
+            projectTask.setProjectIdentifier(backlogId);
+
+            // INITIAL priority when priority null
+
+            // INITIAL status when status is null
+            if (projectTask.getStatus() == "" || projectTask.getStatus() == null) {
+                projectTask.setStatus("TO_DO");
+            }
+
+            if (projectTask.getPriority() == null) { // In the future we need projectTask.getPriority()== 0 to handle
+                                                     // the form
+                projectTask.setPriority(3);
+            }
+
+            return modelMapper.map(projectTaskRepository.save(projectTask), ProjectTaskServiceModel.class);
+        } catch (Exception e) {
+            throw new ProjectNotFoundException("Project not Found");
         }
-
-        Backlog backlog = project.getBacklog();
-        ProjectTask projectTask = modelMapper.map(projectTaskRequest, ProjectTask.class);
-
-        projectTask.setBacklog(backlog);
-        projectTask.setProject(project);
-        backlog.getProjectTasks().add(projectTask);
-        project.getProjectTasks().add(projectTask);
-
-        Integer backlogSequence = backlog.getPTSequence();
-        backlogSequence++;
-        backlog.setPTSequence(backlogSequence);
-        projectTask.setProjectSequence("TASK-" + backlogSequence);
-
-        // INITIAL priority when priority null
-        // if(projectTask.getPriority()==0||projectTask.getPriority()==null){
-        // projectTask.setPriority(3);
-        // }
-
-        if (projectTask.getStatus() == "" || projectTask.getStatus() == null) {
-            projectTask.setStatus("TO_DO");
-        }
-
-        return modelMapper.map(projectTaskRepository.save(projectTask), ProjectTaskServiceModel.class);
     }
 
     @Override
     public List<ProjectTaskServiceModel> findAllProjectProjectTasks(String projectId) {
         Project project = getProject(projectId);
 
-        return project.getProjectTasks().stream().map(task -> modelMapper.map(task, ProjectTaskServiceModel.class))
-                .collect(Collectors.toList());
+        // return project.getProjectTasks().stream().map(task -> modelMapper.map(task,
+        // ProjectTaskServiceModel.class))
+        // .collect(Collectors.toList());
+        return null;
     }
 
     @Override
@@ -76,11 +87,6 @@ public class ProjectTaskServiceImpl implements ProjectTaskService {
 
         ProjectTask projectTask = projectTaskRepository.findById(taskId)
                 .orElseThrow(() -> new ProjectNotFoundException("Project Task '" + taskId + "' not found"));
-
-        if (!project.getProjectTasks().contains(projectTask)) {
-            throw new ProjectNotFoundException(
-                    "Project Task '" + taskId + "' does not exist in project: '" + projectId);
-        }
 
         return modelMapper.map(projectTask, ProjectTaskServiceModel.class);
     }

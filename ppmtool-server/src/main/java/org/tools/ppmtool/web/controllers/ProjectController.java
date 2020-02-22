@@ -51,17 +51,17 @@ public class ProjectController {
                 HttpStatus.CREATED);
     }
 
-    @GetMapping("/{projectId}")
-    public ResponseEntity<?> getProjectById(@PathVariable String projectId) {
+    @GetMapping("/{projectIdentifier}")
+    public ResponseEntity<?> getProjectById(@PathVariable String projectIdentifier) {
         return new ResponseEntity<ProjectResponseModel>(
-                modelMapper.map(projectService.findProjectById(projectId), ProjectResponseModel.class), HttpStatus.OK);
+                modelMapper.map(projectService.findProjectByIdentifier(projectIdentifier), ProjectResponseModel.class), HttpStatus.OK);
     }
 
-    @DeleteMapping("/{projectId}")
-    public ResponseEntity<?> deleteProject(@PathVariable String projectId) {
-        projectService.deleteProjectById(projectId);
+    @DeleteMapping("/{projectIdentifier}")
+    public ResponseEntity<?> deleteProject(@PathVariable String projectIdentifier) {
+        projectService.deleteProjectByIdentifier(projectIdentifier);
 
-        return new ResponseEntity<String>("Project with ID: '" + projectId + "' was deleted", HttpStatus.OK);
+        return new ResponseEntity<String>("Project with ID: '" + projectIdentifier + "' was deleted", HttpStatus.OK);
     }
 
     @PutMapping("/{projectId}")

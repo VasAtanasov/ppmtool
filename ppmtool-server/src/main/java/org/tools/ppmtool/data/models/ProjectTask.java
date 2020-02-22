@@ -38,12 +38,11 @@ public class ProjectTask extends BaseUuidEntity {
     @Column(name = "due_date")
     private LocalDate dueDate;
 
+    @Column(name = "project_identifier", updatable = false)
+    private String projectIdentifier;
+
     @ManyToOne(targetEntity = Backlog.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "backlog_id", referencedColumnName = "id", nullable = false, updatable = false)
     private Backlog backlog;
-
-    @ManyToOne(targetEntity = Project.class, fetch = FetchType.EAGER)
-    @JoinColumn(name = "project_id", referencedColumnName = "id", nullable = false, updatable = false)
-    private Project project;
 
 }

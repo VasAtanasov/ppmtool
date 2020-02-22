@@ -8,9 +8,9 @@ import org.tools.ppmtool.web.models.requests.ProjectCreateRequest;
 public interface ProjectService {
     ProjectServiceModel saveOrUpdateProject(ProjectCreateRequest projectRequest);
 
-    ProjectServiceModel findProjectById(String projectId);
+    ProjectServiceModel findProjectByIdentifier(String projectIdentifier);
 
     Page<ProjectServiceModel> findAllProjects(Pageable pageable);
 
-    void deleteProjectById(String projectId);
+    void deleteProjectByIdentifier(String projectIdentifier);
 }

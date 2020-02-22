@@ -13,12 +13,16 @@ export default (state = initialState.projects, action) => {
             return [...state, { ...action.project }];
         case types.UPDATE_PROJECT_SUCCESS:
             return state.map(project => {
-                return project.id === action.project.id
+                return project.projectIdentifier ===
+                    action.project.projectIdentifier
                     ? action.project
                     : project;
             });
         case types.DELETE_PROJECT:
-            return state.filter(project => project.id !== action.id);
+            return state.filter(
+                project =>
+                    project.projectIdentifier !== action.projectIdentifier
+            );
         default:
             return state;
     }

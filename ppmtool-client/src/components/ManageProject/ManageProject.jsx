@@ -83,8 +83,12 @@ const ManageProject = ({
     );
 };
 
-export function getProjectById(projects, id) {
-    return projects.find(project => project.id === id) || null;
+export function getProjectById(projects, projectIdentifier) {
+    return (
+        projects.find(
+            project => project.projectIdentifier === projectIdentifier
+        ) || null
+    );
 }
 
 ManageProject.propTypes = {

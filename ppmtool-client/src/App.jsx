@@ -1,6 +1,12 @@
 import React from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
-import { Navbar, Dashboard, Landing, ManageProject } from './components';
+import {
+    Navbar,
+    Dashboard,
+    Landing,
+    ManageProject,
+    ProjectBoard
+} from './components';
 import Theme from './Theme';
 import GlobalStyles from './utils/globalStyle';
 import Container from 'react-bootstrap/Container';
@@ -23,12 +29,21 @@ export const routes = [
         component: ManageProject,
         name: 'ManageProject'
     },
-
     {
         path: '/project',
         component: ManageProject,
         name: 'ManageProject'
+    },
+    {
+        path: '/project-board/:id',
+        component: ProjectBoard,
+        name: 'ProjectBoard'
     }
+    // {
+    //     path: '/project-task/:id',
+    //     component: ProjectBoard,
+    //     name: 'ProjectBoard'
+    // }
 ];
 
 function App() {

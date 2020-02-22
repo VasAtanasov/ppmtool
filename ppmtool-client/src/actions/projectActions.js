@@ -13,8 +13,8 @@ export function updateProjectSuccess(project) {
     return { type: types.UPDATE_PROJECT_SUCCESS, project };
 }
 
-export function deleteProjectOptimistic(id) {
-    return { type: types.DELETE_PROJECT, id };
+export function deleteProjectOptimistic(projectIdentifier) {
+    return { type: types.DELETE_PROJECT, projectIdentifier };
 }
 
 export const getProjects = () => async dispatch => {
@@ -41,7 +41,7 @@ export const createProject = project => async dispatch => {
         });
 };
 
-export const deleteProject = id => async dispatch => {
-    dispatch(deleteProjectOptimistic(id));
-    return projectApi.deleteProject(id);
+export const deleteProject = projectIdentifier => async dispatch => {
+    dispatch(deleteProjectOptimistic(projectIdentifier));
+    return projectApi.deleteProject(projectIdentifier);
 };

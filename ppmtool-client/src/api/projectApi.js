@@ -1,7 +1,7 @@
 import http from '../utils/http';
 import { handleResponse, handleError } from './apiUtils';
 
-const PROJECTS_URL = '/api/projects';
+export const PROJECTS_URL = '/api/projects';
 
 export const loadProjects = async () => {
     try {
@@ -12,22 +12,21 @@ export const loadProjects = async () => {
     }
 };
 
-export const deleteProject = async projectId => {
+export const saveProject = async project => {
     try {
-        const response = await http.del(`${PROJECTS_URL}/${projectId}`);
-        return handleResponse(response);
+        const res = await http.post(PROJECTS_URL, {
+            data: project
+        });
+        return handleResponse(res);
     } catch (error) {
         return handleError(error);
     }
 };
 
-export const saveProject = async project => {
+export const deleteProject = async projectIdentifier => {
     try {
-        let httpAction = project.id ? http.put : http.post;
-        const res = await httpAction(PROJECTS_URL + '/' + (project.id || ''), {
-            data: project
-        });
-        return handleResponse(res);
+        const response = await http.del(`${PROJECTS_URL}/${projectIdentifier}`);
+        return handleResponse(response);
     } catch (error) {
         return handleError(error);
     }

@@ -27,7 +27,7 @@ public class Backlog extends BaseUuidEntity {
 
     @Column
     private Integer PTSequence = 0;
-    
+
     @Column(name = "project_identifier", updatable = false)
     private String projectIdentifier;
 

@@ -6,13 +6,14 @@ import org.tools.ppmtool.service.models.ProjectTaskServiceModel;
 import org.tools.ppmtool.web.models.requests.ProjectTaskCreateRequest;
 
 public interface ProjectTaskService {
-    ProjectTaskServiceModel  addProjectTask(String projectIdentifier,ProjectTaskCreateRequest projectTaskRequest);
+    ProjectTaskServiceModel addProjectTask(String projectIdentifier, ProjectTaskCreateRequest projectTaskRequest);
 
-    List<ProjectTaskServiceModel> findAllProjectProjectTasks(String projectId);
+    List<ProjectTaskServiceModel> findBacklogById(String projectIdentifier);
 
-    ProjectTaskServiceModel findProjectProjectTask(String projectId, String taskId);
+    ProjectTaskServiceModel findBacklogTask(String backlogId, String taskSequence);
 
-    void deleteProjectTask(String taskId);
+    void deleteProjectTask(String backlogId, String taskSequence);
 
-    ProjectTaskServiceModel updateProjectTask(ProjectTaskServiceModel updatedTask, String projectId, String taskId);
+    ProjectTaskServiceModel updateProjectTask(ProjectTaskServiceModel updatedTask, String backlogId,
+            String taskSequence);
 }

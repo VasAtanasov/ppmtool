@@ -11,6 +11,7 @@ import lombok.*;
 @NoArgsConstructor
 public class BacklogResponseModel {
     private String id;
+    private String projectIdentifier;
     private Integer PTSequence;
     private List<ProjectTaskResponseModel> projectTasks = new ArrayList<>();
 }

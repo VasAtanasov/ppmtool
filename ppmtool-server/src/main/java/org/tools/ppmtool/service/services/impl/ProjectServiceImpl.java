@@ -36,8 +36,9 @@ public class ProjectServiceImpl implements ProjectService {
             Backlog backlog = new Backlog();
             backlog.setProject(project);
             project.setBacklog(backlog);
-            project.setProjectIdentifier(getSaltString());
-            backlog.setProjectIdentifier(getSaltString());
+            String projectIdentifier = getSaltString();
+            project.setProjectIdentifier(projectIdentifier);
+            backlog.setProjectIdentifier(projectIdentifier);
         } else {
             project = projectRepository.findById(projectRequest.getId()).map(p -> {
                 p.setProjectName(projectRequest.getProjectName());
@@ -70,10 +71,9 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public void deleteProjectByIdentifier(String projectIdentifier) {
-        Project project = projectRepository.findByProjectIdentifier(projectIdentifier)
-                .orElseThrow(() -> new ProjectIdException(
-                        "Cannot Project with ID '" + projectIdentifier + "'. This project does not exist"));
+    public void deleteProjectByIdentifier(String projectId) {
+        Project project = projectRepository.findByProjectIdentifier(projectId).orElseThrow(() -> new ProjectIdException(
+                "Cannot delete Project with ID '" + projectId + "'. This project does not exist"));
 
         projectRepository.delete(project);
     }
@@ -86,9 +86,7 @@ public class ProjectServiceImpl implements ProjectService {
             int index = (int) (rnd.nextFloat() * SALT_CHARS.length());
             salt.append(SALT_CHARS.charAt(index));
         }
-        String saltStr = salt.toString();
-        return saltStr;
-
+        return salt.toString();
     }
 
 }

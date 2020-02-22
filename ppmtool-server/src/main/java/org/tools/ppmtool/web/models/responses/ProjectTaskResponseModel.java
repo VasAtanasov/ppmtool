@@ -16,4 +16,6 @@ public class ProjectTaskResponseModel {
     private String status;
     private Integer priority;
     private LocalDate dueDate;
+    private String projectIdentifier;
+    private String backlogId;
 }

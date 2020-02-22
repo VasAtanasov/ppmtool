@@ -7,10 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.tools.ppmtool.data.models.Backlog;
-import org.tools.ppmtool.data.models.Project;
 import org.tools.ppmtool.data.models.ProjectTask;
 import org.tools.ppmtool.data.repositories.BacklogRepository;
-import org.tools.ppmtool.data.repositories.ProjectRepository;
 import org.tools.ppmtool.data.repositories.ProjectTaskRepository;
 import org.tools.ppmtool.service.models.ProjectTaskServiceModel;
 import org.tools.ppmtool.service.services.ProjectTaskService;
@@ -25,18 +23,18 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor(onConstructor_ = { @Autowired })
 public class ProjectTaskServiceImpl implements ProjectTaskService {
     private final ProjectTaskRepository projectTaskRepository;
-    private final ProjectRepository projectRepository;
     private final BacklogRepository backlogRepository;
     private final ModelMapperWrapper modelMapper;
 
     @Override
-    public ProjectTaskServiceModel addProjectTask(String backlogId,
+    public ProjectTaskServiceModel addProjectTask(String projectIdentifier,
             ProjectTaskCreateRequest projectTaskRequest) {
 
         try {
             // PTs to be added to a specific project, project != null, BL exists
-            Backlog backlog = backlogRepository.findByProjectIdentifier(backlogId)
-                    .orElseThrow(() -> new ProjectNotFoundException("Project not Found"));
+            Backlog backlog = backlogRepository.findByProjectIdentifier(projectIdentifier)
+                    .orElseThrow(() -> new ProjectIdException("Project ID '" + projectIdentifier + "' does not exist"));
+
             // set the bl to pt
 
             ProjectTask projectTask = modelMapper.map(projectTaskRequest, ProjectTask.class);
@@ -51,7 +49,7 @@ public class ProjectTaskServiceImpl implements ProjectTaskService {
 
             // Add Sequence to Project Task
             projectTask.setProjectSequence(backlog.getProjectIdentifier() + "-" + backlogSequence);
-            projectTask.setProjectIdentifier(backlogId);
+            projectTask.setProjectIdentifier(projectIdentifier);
 
             // INITIAL priority when priority null
 
@@ -66,39 +64,46 @@ public class ProjectTaskServiceImpl implements ProjectTaskService {
             }
 
             return modelMapper.map(projectTaskRepository.save(projectTask), ProjectTaskServiceModel.class);
-        } catch (Exception e) {
+        } catch (
+
+        Exception e) {
             throw new ProjectNotFoundException("Project not Found");
         }
     }
 
     @Override
-    public List<ProjectTaskServiceModel> findAllProjectProjectTasks(String projectId) {
-        Project project = getProject(projectId);
+    public List<ProjectTaskServiceModel> findBacklogById(String projectIdentifier) {
+        Backlog backlog = backlogRepository.findByProjectIdentifier(projectIdentifier)
+                .orElseThrow(() -> new ProjectIdException("Project ID '" + projectIdentifier + "' does not exist"));
 
-        // return project.getProjectTasks().stream().map(task -> modelMapper.map(task,
-        // ProjectTaskServiceModel.class))
-        // .collect(Collectors.toList());
-        return null;
+        return backlog.getProjectTasks().stream().map(task -> modelMapper.map(task, ProjectTaskServiceModel.class))
+                .collect(Collectors.toList());
     }
 
     @Override
-    public ProjectTaskServiceModel findProjectProjectTask(String projectId, String taskId) {
-        Project project = getProject(projectId);
+    public ProjectTaskServiceModel findBacklogTask(String backlogId, String taskSequence) {
+        getBacklog(backlogId);
 
-        ProjectTask projectTask = projectTaskRepository.findById(taskId)
-                .orElseThrow(() -> new ProjectNotFoundException("Project Task '" + taskId + "' not found"));
+        ProjectTask projectTask = projectTaskRepository.findByProjectSequence(taskSequence)
+                .orElseThrow(() -> new ProjectNotFoundException("Project Task '" + taskSequence + "' not found"));
+
+        if (!projectTask.getProjectIdentifier().equals(backlogId)) {
+            throw new ProjectNotFoundException(
+                    "Project Task '" + taskSequence + "' does not exist in project: '" + backlogId);
+        }
 
         return modelMapper.map(projectTask, ProjectTaskServiceModel.class);
     }
 
     @Override
-    public ProjectTaskServiceModel updateProjectTask(ProjectTaskServiceModel updatedTask, String projectId,
-            String taskId) {
+    public ProjectTaskServiceModel updateProjectTask(ProjectTaskServiceModel updatedTask, String backlogId,
+            String taskSequence) {
+        getBacklog(backlogId);
 
         ProjectTask projectTaskUpdated = modelMapper.map(updatedTask, ProjectTask.class);
 
-        ProjectTask projectTask = projectTaskRepository.findById(taskId)
-                .orElseThrow(() -> new ProjectNotFoundException("Project Task '" + taskId + "' not found"));
+        ProjectTask projectTask = projectTaskRepository.findByProjectSequence(taskSequence)
+                .orElseThrow(() -> new ProjectNotFoundException("Project Task '" + taskSequence + "' not found"));
 
         projectTask.setProjectSequence(projectTaskUpdated.getProjectSequence());
         projectTask.setSummary(projectTaskUpdated.getSummary());
@@ -111,16 +116,17 @@ public class ProjectTaskServiceImpl implements ProjectTaskService {
     }
 
     @Override
-    public void deleteProjectTask(String taskId) {
+    public void deleteProjectTask(String backlogId, String taskSequence) {
+        getBacklog(backlogId);
 
-        ProjectTask projectTask = projectTaskRepository.findById(taskId)
-                .orElseThrow(() -> new ProjectNotFoundException("Project Task '" + taskId + "' not found"));
+        ProjectTask projectTask = projectTaskRepository.findByProjectSequence(taskSequence)
+                .orElseThrow(() -> new ProjectNotFoundException("Project Task '" + taskSequence + "' not found"));
 
         projectTaskRepository.delete(projectTask);
     }
 
-    private Project getProject(String projectId) {
-        return projectRepository.findById(projectId)
-                .orElseThrow(() -> new ProjectIdException("Project ID '" + projectId + "' does not exist"));
+    private Backlog getBacklog(String backlogId) {
+        return backlogRepository.findById(backlogId)
+                .orElseThrow(() -> new ProjectIdException("Project ID '" + backlogId + "' does not exist"));
     }
 }

@@ -19,13 +19,12 @@ Content-Type: application/json
     "acceptanceCriteria": "test description",
     "status": "",
     "priority": "1",
-    "dueDate":"2019-02-15",
-    "projectId": "b1d9d035-feb5-4072-93c7-18d3d426d0f0"
+    "dueDate":"2019-02-15"
 }
 
 ###
 
-GET http://localhost:8001/api/backlog/b1d9d035-feb5-4072-93c7-18d3d426d0f0 HTTP/1.1
+GET http://localhost:8001/api/backlog/BTOAK HTTP/1.1
 
 ###
 

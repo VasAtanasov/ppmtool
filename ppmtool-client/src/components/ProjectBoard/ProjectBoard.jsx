@@ -1,8 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import Backlog from './Backlog';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { loadBacklog } from '../../actions/backlogActions';
+import { toast } from 'react-toastify';
+const ProjectBoard = ({ backlog, loadBacklog, history, ...props }) => {
+    const { id } = props.match.params;
 
-const ProjectBoard = ({ match }) => {
-    const { id } = match.params;
+    useEffect(() => {
+        loadBacklog(id).catch(error => {
+            toast.error(error.response.data.projectIdentifier);
+            history.push('/dashboard');
+        });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     return (
         <div className="container">
             <Link to={`/addProjectTask/${id}`} className="btn btn-primary mb-3">
@@ -10,67 +23,24 @@ const ProjectBoard = ({ match }) => {
             </Link>
             <br />
             <hr />
-            {
-                // <!-- Backlog STARTS HERE -->
-            }
-            <div className="row">
-                <div className="col-md-4">
-                    <div className="card text-center mb-2">
-                        <div className="card-header bg-secondary text-white">
-                            <h3>TO DO</h3>
-                        </div>
-                    </div>
-                    {
-                        // <!-- SAMPLE PROJECT TASK STARTS HERE -->
-                    }
-                    <div className="card mb-1 bg-light">
-                        <div className="card-header text-primary">
-                            ID: projectSequence -- Priority: priorityString
-                        </div>
-                        <div className="card-body bg-light">
-                            <h5 className="card-title">project_task.summary</h5>
-                            <p className="card-text text-truncate ">
-                                project_task.acceptanceCriteria
-                            </p>
-                            <a href="" className="btn btn-primary">
-                                View / Update
-                            </a>
-
-                            <button className="btn btn-danger ml-4">
-                                Delete
-                            </button>
-                        </div>
-                    </div>
-
-                    {
-                        // <!-- SAMPLE PROJECT TASK ENDS HERE -->
-                    }
+            {backlog.length === 0 ? (
+                <div className="alert alert-info text-center" role="alert">
+                    No Project Tasks on this board
                 </div>
-                <div className="col-md-4">
-                    <div className="card text-center mb-2">
-                        <div className="card-header bg-primary text-white">
-                            <h3>In Progress</h3>
-                        </div>
-                    </div>
-                    {
-                        //  <!-- SAMPLE PROJECT TASK STARTS HERE -->
-                        //         <!-- SAMPLE PROJECT TASK ENDS HERE -->
-                    }
-                </div>
-                <div className="col-md-4">
-                    <div className="card text-center mb-2">
-                        <div className="card-header bg-success text-white">
-                            <h3>Done</h3>
-                        </div>
-                    </div>
-                    {
-                        // <!-- SAMPLE PROJECT TASK STARTS HERE -->
-                        // <!-- SAMPLE PROJECT TASK ENDS HERE -->
-                    }
-                </div>
-            </div>
+            ) : (
+                <Backlog projectTasks={backlog} />
+            )}
         </div>
     );
 };
 
-export default ProjectBoard;
+ProjectBoard.propTypes = {
+    backlog: PropTypes.array.isRequired,
+    loadBacklog: PropTypes.func.isRequired
+};
+
+const mapStateToProps = ({ backlog }) => ({
+    backlog
+});
+
+export default connect(mapStateToProps, { loadBacklog })(ProjectBoard);

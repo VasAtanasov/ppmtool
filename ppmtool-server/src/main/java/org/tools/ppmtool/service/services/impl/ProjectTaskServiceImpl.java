@@ -116,8 +116,9 @@ public class ProjectTaskServiceImpl implements ProjectTaskService {
     }
 
     @Override
-    public void deleteProjectTask(String backlogId, String taskSequence) {
-        getBacklog(backlogId);
+    public void deleteProjectTask(String projectIdentifier, String taskSequence) {
+        backlogRepository.findByProjectIdentifier(projectIdentifier)
+                .orElseThrow(() -> new ProjectIdException("Project ID '" + projectIdentifier + "' does not exist"));
 
         ProjectTask projectTask = projectTaskRepository.findByProjectSequence(taskSequence)
                 .orElseThrow(() -> new ProjectNotFoundException("Project Task '" + taskSequence + "' not found"));

@@ -22,3 +22,14 @@ export const getBacklog = async projectIdentifier => {
         return handleError(error);
     }
 };
+
+export const deleteProjectTask = async (projectIdentifier, taskSequence) => {
+    try {
+        const response = await http.del(
+            `${BACKLOG_URL}/${projectIdentifier}/${taskSequence}`
+        );
+        return handleResponse(response);
+    } catch (error) {
+        return handleError(error);
+    }
+};

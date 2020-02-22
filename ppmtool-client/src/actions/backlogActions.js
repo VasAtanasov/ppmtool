@@ -13,29 +13,41 @@ export function updateProjectTaskSuccess(project) {
     return { type: types.UPDATE_PROJECT_TASK_SUCCESS, project };
 }
 
-export const loadBacklog = projectIdentifier => dispatch => {
-    return backlogApi
-        .getBacklog(projectIdentifier)
-        .then(backlog => {
-            dispatch(loadBacklogSuccess(backlog));
-        })
-        .catch(error => {
-            throw error;
-        });
+export function deleteProjectTaskOptimistic(taskSequence) {
+    return { type: types.DELETE_PROJECT_TASK, taskSequence };
+}
+
+export const loadBacklog = projectIdentifier => async dispatch => {
+    try {
+        const backlog = await backlogApi.getBacklog(projectIdentifier);
+        dispatch(loadBacklogSuccess(backlog));
+    } catch (error) {
+        throw error;
+    }
 };
 
 export const createProjectTask = (
     projectIdentifier,
     projectTask
 ) => async dispatch => {
-    return backlogApi
-        .saveProject(projectIdentifier, projectTask)
-        .then(savedProjectTask => {
-            savedProjectTask.id
-                ? dispatch(createProjectTaskSuccess(savedProjectTask))
-                : dispatch(updateProjectTaskSuccess(savedProjectTask));
-        })
-        .catch(error => {
-            throw error;
-        });
+    try {
+        const savedProjectTask = await backlogApi.saveProjectTask(
+            projectIdentifier,
+            projectTask
+        );
+
+        savedProjectTask.id
+            ? dispatch(createProjectTaskSuccess(savedProjectTask))
+            : dispatch(updateProjectTaskSuccess(savedProjectTask));
+    } catch (error) {
+        throw error;
+    }
+};
+
+export const deleteProjectTask = (
+    projectIdentifier,
+    taskSequence
+) => async dispatch => {
+    dispatch(deleteProjectTaskOptimistic(taskSequence));
+    return backlogApi.deleteProjectTask(projectIdentifier, taskSequence);
 };

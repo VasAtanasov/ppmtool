@@ -51,6 +51,7 @@ public class ProjectTaskServiceImpl implements ProjectTaskService {
         Integer backlogSequence = backlog.getPTSequence();
         // Update the BL SEQUENCE
         backlogSequence++;
+        backlog.setPTSequence(backlogSequence);
 
         // Add Sequence to Project Task
         projectTask.setProjectSequence("TASK-" + backlogSequence);

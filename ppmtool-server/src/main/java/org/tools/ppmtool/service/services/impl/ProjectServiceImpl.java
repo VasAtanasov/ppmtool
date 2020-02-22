@@ -25,13 +25,19 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public ProjectServiceModel saveOrUpdateProject(ProjectCreateRequest projectRequest) {
-        Project project = projectRepository.findById(projectRequest.getId()).map(p -> {
-            p.setProjectName(projectRequest.getProjectName());
-            p.setDescription(projectRequest.getDescription());
-            p.setStartDate(projectRequest.getStartDate());
-            p.setEndDate(projectRequest.getEndDate());
-            return p;
-        }).orElseGet(() -> modelMapper.map(projectRequest, Project.class));
+        Project project =  null;
+        
+        if (projectRequest.getId() == null) {
+            project= modelMapper.map(projectRequest, Project.class);
+        } else {
+             project = projectRepository.findById(projectRequest.getId()).map(p -> {
+                p.setProjectName(projectRequest.getProjectName());
+                p.setDescription(projectRequest.getDescription());
+                p.setStartDate(projectRequest.getStartDate());
+                p.setEndDate(projectRequest.getEndDate());
+                return p;
+            }).orElseThrow(() -> new ProjectIdException("Project ID '" + projectRequest.getId() + "' does not exist"));
+        }
 
         try {
             return modelMapper.map(projectRepository.save(project), ProjectServiceModel.class);

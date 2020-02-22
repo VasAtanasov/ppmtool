@@ -4,8 +4,8 @@ Content-Type: application/json
 {   
     "projectName": "test Name",
     "description": "test description",
-    "startDate": "2019-02-13 01:02:03",
-    "endDate":"2019-02-15 02:03:04"
+    "startDate": "2019-02-13",
+    "endDate":"2019-02-15"
 }
 
 ###
@@ -29,8 +29,8 @@ Content-Type: application/json
 {
     "projectName": "test Name2",
     "description": "test description",
-    "startDate": "2019-02-13 01:02:03",
-    "endDate":"2019-02-15 02:03:04"
+    "startDate": "2019-02-13",
+    "endDate":"2019-02-15"
 }
 
 

@@ -15,5 +15,6 @@ public class ProjectServiceModel {
     private String description;
     private LocalDate startDate;
     private LocalDate endDate;
+    private BacklogServiceMode backlog;
 
 }

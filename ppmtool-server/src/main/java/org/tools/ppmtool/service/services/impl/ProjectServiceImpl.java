@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.tools.ppmtool.data.models.Backlog;
 import org.tools.ppmtool.data.models.Project;
 import org.tools.ppmtool.data.repositories.ProjectRepository;
 import org.tools.ppmtool.exceptions.ProjectIdException;
@@ -25,12 +26,15 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public ProjectServiceModel saveOrUpdateProject(ProjectCreateRequest projectRequest) {
-        Project project =  null;
-        
+        Project project = null;
+
         if (projectRequest.getId() == null) {
-            project= modelMapper.map(projectRequest, Project.class);
+            project = modelMapper.map(projectRequest, Project.class);
+            Backlog backlog = new Backlog();
+            backlog.setProject(project);
+            project.setBacklog(backlog);
         } else {
-             project = projectRepository.findById(projectRequest.getId()).map(p -> {
+            project = projectRepository.findById(projectRequest.getId()).map(p -> {
                 p.setProjectName(projectRequest.getProjectName());
                 p.setDescription(projectRequest.getDescription());
                 p.setStartDate(projectRequest.getStartDate());

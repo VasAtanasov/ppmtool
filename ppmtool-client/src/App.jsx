@@ -5,7 +5,8 @@ import {
     Dashboard,
     Landing,
     ManageProject,
-    ProjectBoard
+    ProjectBoard,
+    ManageProjectTask
 } from './components';
 import Theme from './Theme';
 import GlobalStyles from './utils/globalStyle';
@@ -35,15 +36,20 @@ export const routes = [
         name: 'ManageProject'
     },
     {
-        path: '/project-board/:id',
+        path: '/project-board/:projectIdentifier',
         component: ProjectBoard,
         name: 'ProjectBoard'
+    },
+    {
+        path: '/project-task/:projectIdentifier/:taskSequence',
+        component: ManageProjectTask,
+        name: 'ManageProjectTask'
+    },
+    {
+        path: '/project-task/:projectIdentifier',
+        component: ManageProjectTask,
+        name: 'ManageProjectTask'
     }
-    // {
-    //     path: '/project-task/:id',
-    //     component: ProjectBoard,
-    //     name: 'ProjectBoard'
-    // }
 ];
 
 function App() {

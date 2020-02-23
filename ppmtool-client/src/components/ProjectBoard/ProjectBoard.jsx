@@ -5,11 +5,12 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { loadBacklog } from '../../actions/backlogActions';
 import { toast } from 'react-toastify';
+
 const ProjectBoard = ({ backlog, loadBacklog, history, ...props }) => {
-    const { id } = props.match.params;
+    const { projectIdentifier } = props.match.params;
 
     useEffect(() => {
-        loadBacklog(id).catch(error => {
+        loadBacklog(projectIdentifier).catch(error => {
             toast.error(error.response.data.projectIdentifier);
             history.push('/dashboard');
         });
@@ -18,7 +19,10 @@ const ProjectBoard = ({ backlog, loadBacklog, history, ...props }) => {
 
     return (
         <div className="container">
-            <Link to={`/addProjectTask/${id}`} className="btn btn-primary mb-3">
+            <Link
+                to={`/project-task/${projectIdentifier}`}
+                className="btn btn-primary mb-3"
+            >
                 <i className="fas fa-plus-circle"> Create Project Task</i>
             </Link>
             <br />

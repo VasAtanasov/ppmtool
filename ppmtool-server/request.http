@@ -12,25 +12,25 @@ Content-Type: application/json
 
 ###
 
-POST {{host}}/backlog/BTOAK HTTP/1.1
+POST {{host}}/backlog/QFZ87 HTTP/1.1
 Content-Type: application/json
 
 {   
     "summary": "test Name",
     "acceptanceCriteria": "test description",
-    "status": "TO_DO",
-    "priority": 3,
+    "status": "IN_PROGRESS",
+    "priority": 1,
     "dueDate":"2019-02-15"
 }
 
 ###
 
-GET {{host}}/backlog/BTOAK HTTP/1.1
+GET {{host}}/backlog/QFZ87 HTTP/1.1
 
 ###
 
 
-DELETE {{host}}/backlog/BTOAK/BTOAK-1 HTTP/1.1
+DELETE {{host}}/backlog/QFZ87/QFZ87-1 HTTP/1.1
 
 ###
 

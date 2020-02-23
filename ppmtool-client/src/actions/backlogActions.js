@@ -35,7 +35,6 @@ export const createProjectTask = (
             projectIdentifier,
             projectTask
         );
-
         savedProjectTask.id
             ? dispatch(createProjectTaskSuccess(savedProjectTask))
             : dispatch(updateProjectTaskSuccess(savedProjectTask));

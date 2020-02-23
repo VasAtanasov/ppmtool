@@ -26,6 +26,10 @@ const http = (() => {
         return call('PUT', url, options);
     };
 
+    const patch = function(url, options) {
+        return call('PATCH', url, options);
+    };
+
     const del = function(url, options) {
         return call('DELETE', url, options);
     };
@@ -34,7 +38,8 @@ const http = (() => {
         get,
         post,
         put,
-        del
+        del,
+        patch
     };
 })();
 

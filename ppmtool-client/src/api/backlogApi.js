@@ -5,9 +5,17 @@ export const BACKLOG_URL = '/api/backlog';
 
 export const saveProjectTask = async (projectIdentifier, projectTask) => {
     try {
-        const res = await http.post(`${BACKLOG_URL}/${projectIdentifier}`, {
-            data: projectTask
-        });
+        const call = projectTask.projectSequence ? http.patch : http.post;
+
+        const res = await call(
+            `${BACKLOG_URL}/${projectIdentifier}` +
+                (projectTask.projectSequence
+                    ? '/' + projectTask.projectSequence
+                    : ''),
+            {
+                data: projectTask
+            }
+        );
         return handleResponse(res);
     } catch (error) {
         return handleError(error);

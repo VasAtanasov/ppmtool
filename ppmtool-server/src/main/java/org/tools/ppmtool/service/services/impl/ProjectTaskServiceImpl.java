@@ -76,7 +76,10 @@ public class ProjectTaskServiceImpl implements ProjectTaskService {
         Backlog backlog = backlogRepository.findByProjectIdentifier(projectIdentifier)
                 .orElseThrow(() -> new ProjectIdException("Project ID '" + projectIdentifier + "' does not exist"));
 
-        return backlog.getProjectTasks().stream().map(task -> modelMapper.map(task, ProjectTaskServiceModel.class))
+        return backlog.getProjectTasks()
+                .stream()
+                .sorted((a,b) -> Integer.compare(a.getPriority(), b.getPriority()))
+                .map(task -> modelMapper.map(task, ProjectTaskServiceModel.class))
                 .collect(Collectors.toList());
     }
 
@@ -96,9 +99,9 @@ public class ProjectTaskServiceImpl implements ProjectTaskService {
     }
 
     @Override
-    public ProjectTaskServiceModel updateProjectTask(ProjectTaskServiceModel updatedTask, String backlogId,
+    public ProjectTaskServiceModel updateProjectTask(ProjectTaskServiceModel updatedTask, String projectIdentifier,
             String taskSequence) {
-        getBacklog(backlogId);
+        getBacklog(projectIdentifier);
 
         ProjectTask projectTaskUpdated = modelMapper.map(updatedTask, ProjectTask.class);
 
@@ -127,7 +130,7 @@ public class ProjectTaskServiceImpl implements ProjectTaskService {
     }
 
     private Backlog getBacklog(String backlogId) {
-        return backlogRepository.findById(backlogId)
+        return backlogRepository.findByProjectIdentifier(backlogId)
                 .orElseThrow(() -> new ProjectIdException("Project ID '" + backlogId + "' does not exist"));
     }
 }

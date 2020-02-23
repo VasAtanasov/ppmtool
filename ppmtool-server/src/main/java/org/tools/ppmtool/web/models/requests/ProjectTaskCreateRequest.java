@@ -17,6 +17,8 @@ public class ProjectTaskCreateRequest {
 
     private String acceptanceCriteria;
 
+    private String projectSequence;
+
     private String status;
 
     private Integer priority;

@@ -34,7 +34,7 @@ const ProjectTask = ({ deleteProjectTask, projectTask }) => {
                     {projectTask.acceptanceCriteria}
                 </p>
                 <Link
-                    to={`/updateProjectTask/${projectTask.projectIdentifier}/${projectTask.projectSequence}`}
+                    to={`/project-task/${projectTask.projectIdentifier}/${projectTask.projectSequence}`}
                     className="btn btn-primary"
                 >
                     View / Update

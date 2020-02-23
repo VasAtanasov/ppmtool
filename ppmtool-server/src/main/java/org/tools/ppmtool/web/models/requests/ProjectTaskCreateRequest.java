@@ -23,6 +23,6 @@ public class ProjectTaskCreateRequest {
 
     private Integer priority;
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-mm-dd")
     private LocalDate dueDate;
 }

@@ -67,7 +67,6 @@ const ManageProjectTask = ({
     const handleSave = event => {
         event.preventDefault();
         if (!formIsValid()) return;
-        debugger;
         setSaving(true);
         createProjectTask(projectIdentifier, projectTask)
             .then(() => {

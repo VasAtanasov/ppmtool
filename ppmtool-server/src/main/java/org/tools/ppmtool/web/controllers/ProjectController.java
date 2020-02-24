@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.tools.ppmtool.data.models.User;
 import org.tools.ppmtool.service.services.MapValidationErrorService;
 import org.tools.ppmtool.service.services.ProjectService;
 import org.tools.ppmtool.utils.ModelMapperWrapper;
@@ -39,14 +41,15 @@ public class ProjectController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createNewProject(@Valid @RequestBody ProjectCreateRequest project, BindingResult result) {
+    public ResponseEntity<?> createNewProject(@Valid @RequestBody ProjectCreateRequest project, BindingResult result,
+            @AuthenticationPrincipal User creator) {
 
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         if (errorMap != null)
             return errorMap;
 
-        return new ResponseEntity<ProjectResponseModel>(
-                modelMapper.map(projectService.saveOrUpdateProject(project), ProjectResponseModel.class),
+        return new ResponseEntity<ProjectResponseModel>(modelMapper
+                .map(projectService.saveOrUpdateProject(project, creator), ProjectResponseModel.class),
                 HttpStatus.CREATED);
     }
 

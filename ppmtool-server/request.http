@@ -4,15 +4,31 @@ POST {{host}}/users/register HTTP/1.1
 Content-Type: application/json
 
 {
-    "username": "asdads@asas.asas",
+    "username": "asdads@asacs.asas",
     "fullName": "full name",
     "password": "pass",
     "confirmPassword":"pass"
 }
 
 ###
+
+GET {{host}}/projects HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJmdWxsTmFtZSI6ImZ1bGwgbmFtZSIsImlkIjoiNTJlM2EzNzYtNGJkMC00YTM0LWFkZDgtNWMxNjg2ZDYxNzlmIiwiZXhwIjoxNTgyNTUwNjQwLCJpYXQiOjE1ODI1NTA2MTAsInVzZXJuYW1lIjoiYXNkYWRzQGFzYWNzLmFzYXMifQ.AAGZ73LdzQ9Fry80yfvVt8zJUa6zzY0kQygiK4WuJQ7rodPgKc92AYlmlxY210xkwIr48Dqst4UfDf9QhfkqMg
+###
+
+POST {{host}}/users/login HTTP/1.1
+Content-Type: application/json
+
+{
+    "username": "asdads@asacs.asas",
+    "password": "pass"
+}
+
+###
+
 POST {{host}}/projects HTTP/1.1
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJmdWxsTmFtZSI6ImZ1bGwgbmFtZSIsImlkIjoiN2Y2MjE0MmMtMjFmOC00OWVjLThhZGQtZjEwMmYyZjYwNDhlIiwiZXhwIjoxNTgyNTUxODQ2LCJpYXQiOjE1ODI1NTE4MTYsInVzZXJuYW1lIjoiYXNkYWRzQGFzYWNzLmFzYXMifQ.EYZbyBsKh2o9TVx7Y2T7mCWAHyN1-xwBdS1ncfaqwbXJJw3UMGzo2RnVAN5cuzQNmWR7OcAgAyfoNgM-MZ2Pkw
 
 {   
     "projectName": "test Name",

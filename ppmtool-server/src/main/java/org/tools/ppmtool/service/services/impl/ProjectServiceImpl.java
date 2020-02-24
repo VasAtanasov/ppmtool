@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.tools.ppmtool.data.models.Backlog;
 import org.tools.ppmtool.data.models.Project;
+import org.tools.ppmtool.data.models.User;
 import org.tools.ppmtool.data.repositories.ProjectRepository;
 import org.tools.ppmtool.exceptions.ProjectIdException;
 import org.tools.ppmtool.service.models.ProjectServiceModel;
@@ -27,7 +28,7 @@ public class ProjectServiceImpl implements ProjectService {
     private final ModelMapperWrapper modelMapper;
 
     @Override
-    public ProjectServiceModel saveOrUpdateProject(ProjectCreateRequest projectRequest) {
+    public ProjectServiceModel saveOrUpdateProject(ProjectCreateRequest projectRequest, User creator) {
 
         Project project = null;
 
@@ -48,6 +49,7 @@ public class ProjectServiceImpl implements ProjectService {
                 return p;
             }).orElseThrow(() -> new ProjectIdException("Project ID '" + projectRequest.getId() + "' does not exist"));
         }
+        project.setUser(creator);
 
         try {
             return modelMapper.map(projectRepository.save(project), ProjectServiceModel.class);

@@ -7,9 +7,10 @@ import org.springframework.stereotype.Repository;
 import org.tools.ppmtool.data.models.User;
 
 @Repository
-public interface UserRepository extends CrudRepository<User, Long> {
+public interface UserRepository extends CrudRepository<User, String> {
     Optional<User> findByUsername(String username);
 
 	Boolean existsByUsernameIgnoreCase(String username);
 }
 
+    

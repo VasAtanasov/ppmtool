@@ -20,10 +20,10 @@ public class ProjectCreateRequest {
     @NotBlank(message = "Project description is required")
     private String description;
 
-    @JsonFormat(pattern = "yyyy-mm-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate startDate;
 
-    @JsonFormat(pattern = "yyyy-mm-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate endDate;
 
 }

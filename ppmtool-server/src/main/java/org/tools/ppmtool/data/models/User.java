@@ -1,10 +1,15 @@
 package org.tools.ppmtool.data.models;
 
 import java.beans.Transient;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -33,6 +38,9 @@ public class User extends BaseUuidEntity implements UserDetails {
 
     @Column(name = "password", nullable = false)
     private String password;
+
+    @OneToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER, mappedBy = "user", orphanRemoval = true)
+    private List<Project> projects = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

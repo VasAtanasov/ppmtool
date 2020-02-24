@@ -32,4 +32,9 @@ public class Project extends BaseUuidEntity {
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "project")
     private Backlog backlog;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User user;
+
+    private String projectLeader;
 }

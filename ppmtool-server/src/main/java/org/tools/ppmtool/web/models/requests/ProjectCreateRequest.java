@@ -17,6 +17,8 @@ public class ProjectCreateRequest {
     @NotBlank(message = "Project name is required")
     private String projectName;
 
+    private String projectIdentifier;
+
     @NotBlank(message = "Project description is required")
     private String description;
 

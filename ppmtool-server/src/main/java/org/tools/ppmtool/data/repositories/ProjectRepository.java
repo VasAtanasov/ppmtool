@@ -15,5 +15,7 @@ public interface ProjectRepository extends JpaRepository<Project, String> {
   Optional<Project> findByProjectIdentifierAndProjectLeader(
       String projectIdentifier, String projectLeader);
 
+  boolean existsByProjectIdentifierAndProjectLeader(String projectIdentifier, String projectLeader);
+
   Page<Project> findByProjectLeader(String projectLeader, Pageable pageable);
 }

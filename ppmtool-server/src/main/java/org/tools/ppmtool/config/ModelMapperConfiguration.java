@@ -3,6 +3,7 @@ package org.tools.ppmtool.config;
 import org.modelmapper.AbstractConverter;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.config.Configuration.AccessLevel;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -19,6 +20,11 @@ public class ModelMapperConfiguration {
 
     @Bean
     public ModelMapper modelMapper() {
+
+        mapper.getConfiguration()
+                .setFieldAccessLevel(AccessLevel.PRIVATE)
+                .setFieldMatchingEnabled(true);
+
         Converter<LocalDateTime, String> toLocalDate = new AbstractConverter<LocalDateTime, String>() {
             @Override
             protected String convert(LocalDateTime localDateTime) {

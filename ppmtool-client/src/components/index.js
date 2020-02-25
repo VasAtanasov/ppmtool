@@ -4,6 +4,9 @@ import Landing from './Landing/Landing';
 import ManageProjectTask from './ManageProjectTask/ManageProjectTask';
 import ManageProject from './ManageProject/ManageProject';
 import ProjectBoard from './ProjectBoard/ProjectBoard';
+import Register from './ManageUser/Register';
+import Login from './ManageUser/Login';
+import SecuredRoute from './common/SecuredRoute';
 
 export {
     Navbar,
@@ -11,5 +14,8 @@ export {
     Landing,
     ManageProject,
     ProjectBoard,
-    ManageProjectTask
+    ManageProjectTask,
+    Register,
+    Login,
+    SecuredRoute
 };

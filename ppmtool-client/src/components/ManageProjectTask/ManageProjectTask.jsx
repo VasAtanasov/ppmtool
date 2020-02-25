@@ -13,8 +13,7 @@ const newProjectTask = {
     status: '',
     priority: 0,
     dueDate: '',
-    projectIdentifier: '',
-    errors: {}
+    projectIdentifier: ''
 };
 
 const ManageProjectTask = ({
@@ -79,6 +78,7 @@ const ManageProjectTask = ({
                 setErrors({ ...error.response.data });
             });
     };
+    
     return (
         <ProjectTaskForm
             projectIdentifier={projectIdentifier}

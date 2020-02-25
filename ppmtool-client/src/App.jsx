@@ -6,7 +6,10 @@ import {
     Landing,
     ManageProject,
     ProjectBoard,
-    ManageProjectTask
+    ManageProjectTask,
+    Register,
+    Login,
+    SecuredRoute
 } from './components';
 import Theme from './Theme';
 import GlobalStyles from './utils/globalStyle';
@@ -18,37 +21,62 @@ export const routes = [
     {
         path: '/home',
         component: Landing,
-        name: 'Landing'
+        name: 'Landing',
+        isSecured: false
+    },
+    {
+        path: '/register',
+        component: Register,
+        name: 'Register',
+        isSecured: false
+    },
+    {
+        path: '/login',
+        component: Login,
+        name: 'Login',
+        isSecured: false
+    },
+    {
+        path: '/register',
+        component: Register,
+        name: 'Register',
+        isSecured: false
     },
     {
         path: '/dashboard',
         component: Dashboard,
-        name: 'Dashboard'
+        name: 'Dashboard',
+        isSecured: true
     },
     {
         path: '/project/:id',
         component: ManageProject,
-        name: 'ManageProject'
+        name: 'ManageProject',
+        isSecured: true
     },
     {
         path: '/project',
         component: ManageProject,
-        name: 'ManageProject'
+        name: 'ManageProject',
+        isSecured: true
     },
     {
         path: '/project-board/:projectIdentifier',
         component: ProjectBoard,
-        name: 'ProjectBoard'
+        name: 'ProjectBoard',
+        isSecured: true
     },
     {
         path: '/project-task/:projectIdentifier/:taskSequence',
         component: ManageProjectTask,
-        name: 'ManageProjectTask'
+        name: 'ManageProjectTask',
+        isSecured: true
     },
     {
         path: '/project-task/:projectIdentifier',
         component: ManageProjectTask,
-        name: 'ManageProjectTask'
+        name: 'ManageProjectTask',
+        isSecured: true
     }
 ];
 
@@ -60,14 +88,23 @@ function App() {
             <Container style={{ paddingTop: '80px' }}>
                 <Switch>
                     <Redirect exact from="/" to="/home" />
-                    {routes.map((routObj, idx) => (
-                        <Route
-                            exact
-                            key={idx}
-                            path={routObj.path}
-                            component={routObj.component}
-                        />
-                    ))}
+                    {routes.map((routObj, idx) =>
+                        routObj.isSecured ? (
+                            <SecuredRoute
+                                exact
+                                key={idx}
+                                path={routObj.path}
+                                component={routObj.component}
+                            />
+                        ) : (
+                            <Route
+                                exact
+                                key={idx}
+                                path={routObj.path}
+                                component={routObj.component}
+                            />
+                        )
+                    )}
                 </Switch>
                 <ToastContainer autoClose={3000} />
             </Container>

@@ -2,16 +2,19 @@ import React from 'react';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import Container from 'react-bootstrap/Container';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 import { StyledLink, NavbarWarper } from './Navbar.styles';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { logout } from '../../actions/securityActions';
 
-const Navigation = ({ security, logout }) => {
+const Navigation = ({ security, logout, history }) => {
     const { validToken, user } = security;
 
-    const handleLogout = () => logout();
+    const handleLogout = () => {
+        logout();
+        window.location.href = '/';
+    };
 
     return (
         <NavbarWarper>
@@ -26,7 +29,7 @@ const Navigation = ({ security, logout }) => {
                     </Navbar.Brand>
                     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                     {validToken && user ? (
-                        <NavLink id="responsive-navbar-nav">
+                        <Navbar.Collapse id="responsive-navbar-nav">
                             <Nav className="mr-auto">
                                 <StyledLink>
                                     <NavLink
@@ -39,13 +42,10 @@ const Navigation = ({ security, logout }) => {
                             </Nav>
                             <Nav>
                                 <StyledLink>
-                                    <NavLink
-                                        className="nav-link"
-                                        to="/dashboard"
-                                    >
+                                    <Link className="nav-link" to="/dashboard">
                                         <i className="fas fa-user-circle mr-1" />
                                         {user.fullName}
-                                    </NavLink>
+                                    </Link>
                                 </StyledLink>
                                 <StyledLink>
                                     <NavLink
@@ -57,7 +57,7 @@ const Navigation = ({ security, logout }) => {
                                     </NavLink>
                                 </StyledLink>
                             </Nav>
-                        </NavLink>
+                        </Navbar.Collapse>
                     ) : (
                         <Navbar.Collapse id="responsive-navbar-nav">
                             <Nav className="ml-auto">
